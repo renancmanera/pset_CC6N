@@ -2,10 +2,10 @@
 # Preencha seus dados e leia a declaração de honestidade abaixo. NÃO APAGUE
 # nenhuma linha deste comentário de seu código!
 #
-#    Nome completo:
-#    Matrícula:
-#    Turma:
-#    Email:
+#    Nome completo: Arthur Oliveira Rueda e Renan Carvalho Manera
+#    Matrícula: 202308630 e 202308516
+#    Turma: CC6N
+#    Email: arthurolivrueda@gmail.com e rcarvalhomanera@gmail.com
 #
 # DECLARAÇÃO DE HONESTIDADE ACADÊMICA:
 # Eu afirmo que o código abaixo foi de minha autoria. Também afirmo que não
@@ -33,21 +33,21 @@ class Imagem:
         self.altura = altura
         self.pixels = pixels
 
+    # ler o pixel por coordenada
     def get_pixel(self, x, y):
-        return self.pixels[x, y]
-
+        return self.pixels[y * self.largura + x]
+    # logica: y x largura da linha + x que é ate onde voce quer chegar = indice do pixel
     def set_pixel(self, x, y, c):
-        self.pixels[x, y] = c
+        self.pixels[y * self.largura + x] = c
 
+    # cria uma nova imagem em branco, percorre cada pixel na imagem original, aplica a funcao e salva na imagem nova
     def aplicar_por_pixel(self, func):
-        resultado = Imagem.nova(self.altura, self.largura)
+        resultado = Imagem.nova(self.largura, self.altura) # largura e altura ordem correta
         for x in range(resultado.largura):
-            nova_cor = ""
-            y = ""
             for y in range(resultado.altura):
                 cor = self.get_pixel(x, y)
                 nova_cor = func(cor)
-            resultado.set_pixel(y, x, nova_cor)
+            resultado.set_pixel(x, y, nova_cor) # x, y na ordem correta
         return resultado
 
     def invertida(self):
@@ -212,10 +212,39 @@ if __name__ == '__main__':
     # O código neste bloco só será executado quando você executar
     # explicitamente seu script e não quando os testes estiverem
     # sendo executados. Este é um bom lugar para gerar imagens, etc.
-    pass
+    # pass
+
+    # QUESTÃO 01: se você passar essa imagem pelo filtro de inversão, qual seria o
+    # output esperado? Justifique sua resposta.
+
+    # CÓDIGO:
+     imagem_teste = Imagem(4, 1, [29, 89, 136, 200])
+     imagem_invertida = imagem_teste.invertida()
+     print("Os pixels da imagem invertida gerada são:", imagem_invertida.pixels)
+     output_esperado = Imagem(4, 1, [226, 166, 119, 55])
+     if imagem_invertida.pixels == output_esperado.pixels:
+        print("Os pixels da imagem invertida gerada correspondem exatamente aos pixels que eram esperados.")
+     else:
+        print("Os valores de pixel na imagem invertida são diferentes do que era esperado.")
+
+    # RESPOSTA:
+    # Output esperado dos pixels é [226, 166, 119, 55].
+    #A fórmula para inverter um pixel é: novo_pixel = 255 - pixel_original
+    # Para obtê-lo, basta subtrair os valores de cada um dos pixels originais ([29, 89, 136, 200]) de 255.
+    # Cálculo:
+    # 255 - 29 = 226
+    # 255 - 89 = 166
+    # 255 - 136 = 119
+    # 255 - 200 = 55
+
+
+
+
+
 
     # O código a seguir fará com que as janelas de Imagem.mostrar
     # sejam exibidas corretamente, quer estejamos executando
     # interativamente ou não:
-    if WINDOWS_OPENED and not sys.flags.interactive:
-        tk_root.mainloop()
+    
+    #if WINDOWS_OPENED and not sys.flags.interactive:
+    #    tk_root.mainloop()
