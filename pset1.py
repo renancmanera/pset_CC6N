@@ -36,7 +36,7 @@ class Imagem:
     # ler o pixel por coordenada
     def get_pixel(self, x, y):
         return self.pixels[y * self.largura + x]
-    # logica: largura da linha + x que é ate onde voce quer chegar = indice do pixel
+    # logica: y largura da linha + x que é ate onde voce quer chegar = indice do pixel
     def set_pixel(self, x, y, c):
         self.pixels[y * self.largura + x] = c
 
