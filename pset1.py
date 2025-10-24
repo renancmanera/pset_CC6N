@@ -47,11 +47,11 @@ class Imagem:
             for y in range(resultado.altura):
                 cor = self.get_pixel(x, y)
                 nova_cor = func(cor)
-            resultado.set_pixel(x, y, nova_cor) # x, y na ordem correta
+                resultado.set_pixel(x, y, nova_cor) # dentro do loop interno, é chamado para cada pixel da imagem original
         return resultado
 
     def invertida(self):
-        return self.aplicar_por_pixel(lambda c: 256 - c)
+        return self.aplicar_por_pixel(lambda c: 255 - c) # 255 - c pois o pixel é um numero de 0 a 255
 
     def borrada(self, n):
         raise NotImplementedError
@@ -214,28 +214,48 @@ if __name__ == '__main__':
     # sendo executados. Este é um bom lugar para gerar imagens, etc.
     # pass
 
+
+
+
+
     # QUESTÃO 01: se você passar essa imagem pelo filtro de inversão, qual seria o
     # output esperado? Justifique sua resposta.
 
     # CÓDIGO:
-     imagem_teste = Imagem(4, 1, [29, 89, 136, 200])
-     imagem_invertida = imagem_teste.invertida()
-     print("Os pixels da imagem invertida gerada são:", imagem_invertida.pixels)
-     output_esperado = Imagem(4, 1, [226, 166, 119, 55])
-     if imagem_invertida.pixels == output_esperado.pixels:
-        print("Os pixels da imagem invertida gerada correspondem exatamente aos pixels que eram esperados.")
-     else:
-        print("Os valores de pixel na imagem invertida são diferentes do que era esperado.")
+    # imagem_teste = Imagem(4, 1, [29, 89, 136, 200])
+    # imagem_invertida = imagem_teste.invertida()
+    # print("Os pixels da imagem invertida gerada são:", imagem_invertida.pixels)
+    # output_esperado = Imagem(4, 1, [226, 166, 119, 55])
+    # if imagem_invertida.pixels == output_esperado.pixels:
+    #    print("Os pixels da imagem invertida gerada correspondem exatamente aos pixels que eram esperados.")
+    # else:
+    #    print("Os valores de pixel na imagem invertida são diferentes do que era esperado.")
 
     # RESPOSTA:
     # Output esperado dos pixels é [226, 166, 119, 55].
-    #A fórmula para inverter um pixel é: novo_pixel = 255 - pixel_original
+    # A fórmula para inverter um pixel é: novo_pixel = 255 - pixel_original
     # Para obtê-lo, basta subtrair os valores de cada um dos pixels originais ([29, 89, 136, 200]) de 255.
     # Cálculo:
     # 255 - 29 = 226
     # 255 - 89 = 166
     # 255 - 136 = 119
     # 255 - 200 = 55
+
+    # QUESTÃO 02: faça a depuração e, quando terminar, seu código deve conseguir passar em todos os testes do grupo de teste
+    # TestInvertida (incluindo especificamente o que você acabou de criar). Execute seu filtro de inversão na imagem
+    # test_images/bluegill.png, salve o resultado como uma imagem PNG e salve a imagem.
+
+    # CÓDIGO:
+    # imagem_peixe = Imagem.carregar('test_images/bluegill.png')
+    # imagem_peixe_invertida = imagem_peixe.invertida()
+    # imagem_peixe_invertida.salvar('test_images/bluegill.png')
+    # imagem_peixe_invertida.mostrar()
+
+    # RESPOSTA:
+    # Primeiro carrega a imagem original do peixe e adiciona variável
+    # depois aplica o filtro de inversão e adiciona variável de resultado
+    # depois salva a imagem invertida e mostra a imagem invertida
+
 
 
 
