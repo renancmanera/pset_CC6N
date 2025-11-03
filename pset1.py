@@ -34,8 +34,14 @@ class Imagem:
         self.pixels = pixels
 
     # ler o pixel por coordenada
+    # se o pixel for fora da imagem, retorna o pixel mais proximo
     def get_pixel(self, x, y):
-        return self.pixels[y * self.largura + x]
+        x_valido = max(0, x)
+        x_valido = min(x_valido, self.largura - 1)
+        y_valido = max(0, y)
+        y_valido = min(y_valido, self.altura - 1)
+        return self.pixels[y_valido * self.largura + x_valido]
+    
     # logica: y largura da linha + x que é ate onde voce quer chegar = indice do pixel
     def set_pixel(self, x, y, c):
         self.pixels[y * self.largura + x] = c
@@ -64,9 +70,6 @@ class Imagem:
                     for h in range(tamanho_kernel):
                         x1 = x - indice_centro + h
                         y1 = y - indice_centro + w
-                        # Limitar índices aos limites da imagem (clamping)
-                        x1 = max(0, min(x1, self.largura - 1))
-                        y1 = max(0, min(y1, self.altura - 1))
                         nova_cor += self.get_pixel(x1, y1) * kernel[w][h]
                 # Arredondar e limitar o valor ao intervalo [0, 255]
                 nova_cor = round(nova_cor)
@@ -319,6 +322,30 @@ if __name__ == '__main__':
     
     # 4. O valor do pixel na imagem de saída no local indicado pelo destaque vermelho é: 33.
 
+    # QUESTÃO 04: quando você tiver implementado seu código, tente executá-lo em
+    # test_images/pigbird.png com o seguinte kernel 9 × 9:
+    
+    # CÓDIGO:
+    # Imagem de entrada:
+    #imagem_porco_entrada = Imagem.carregar('test_images/pigbird.png')
+    #kernel = [
+    #    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #    [1, 0, 0, 0, 0, 0, 0, 0, 0],
+    #    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #    [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    #]
+
+    # Funcao de correlacao:
+    #imagem_porco_correlacao = imagem_porco_entrada.correlacao(kernel)
+
+    # Salvar e mostrar imagem gerada
+    #imagem_porco_correlacao.salvar('test_images/pigbird.png')
+    #imagem_porco_correlacao.mostrar()
 
 
 
