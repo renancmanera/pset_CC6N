@@ -53,6 +53,27 @@ class Imagem:
     def invertida(self):
         return self.aplicar_por_pixel(lambda c: 255 - c) # 255 - c pois o pixel é um numero de 0 a 255
 
+    def correlacao(self, kernel):
+        tamanho_kernel = len(kernel)
+        indice_centro = tamanho_kernel // 2
+        final_img = Imagem.nova(self.largura, self.altura)
+        for x in range(final_img.largura):
+            for y in range(final_img.altura):
+                nova_cor = 0
+                for w in range(tamanho_kernel):
+                    for h in range(tamanho_kernel):
+                        x1 = x - indice_centro + h
+                        y1 = y - indice_centro + w
+                        # Limitar índices aos limites da imagem (clamping)
+                        x1 = max(0, min(x1, self.largura - 1))
+                        y1 = max(0, min(y1, self.altura - 1))
+                        nova_cor += self.get_pixel(x1, y1) * kernel[w][h]
+                # Arredondar e limitar o valor ao intervalo [0, 255]
+                nova_cor = round(nova_cor)
+                nova_cor = max(0, min(255, nova_cor))
+                final_img.set_pixel(x, y, nova_cor)
+        return final_img
+
     def borrada(self, n):
         raise NotImplementedError
 
@@ -212,7 +233,7 @@ if __name__ == '__main__':
     # O código neste bloco só será executado quando você executar
     # explicitamente seu script e não quando os testes estiverem
     # sendo executados. Este é um bom lugar para gerar imagens, etc.
-    # pass
+    pass
 
 
 
@@ -222,13 +243,13 @@ if __name__ == '__main__':
     # output esperado? Justifique sua resposta.
 
     # CÓDIGO:
-    # imagem_teste = Imagem(4, 1, [29, 89, 136, 200])
-    # imagem_invertida = imagem_teste.invertida()
-    # print("Os pixels da imagem invertida gerada são:", imagem_invertida.pixels)
-    # output_esperado = Imagem(4, 1, [226, 166, 119, 55])
-    # if imagem_invertida.pixels == output_esperado.pixels:
-    #    print("Os pixels da imagem invertida gerada correspondem exatamente aos pixels que eram esperados.")
-    # else:
+    #imagem_teste = Imagem(4, 1, [29, 89, 136, 200])
+    #imagem_invertida = imagem_teste.invertida()
+    #print("Os pixels da imagem invertida gerada são:", imagem_invertida.pixels)
+    #output_esperado = Imagem(4, 1, [226, 166, 119, 55])
+    #if imagem_invertida.pixels == output_esperado.pixels:
+    #   print("Os pixels da imagem invertida gerada correspondem exatamente aos pixels que eram esperados.")
+    #else:
     #    print("Os valores de pixel na imagem invertida são diferentes do que era esperado.")
 
     # RESPOSTA:
@@ -246,15 +267,59 @@ if __name__ == '__main__':
     # test_images/bluegill.png, salve o resultado como uma imagem PNG e salve a imagem.
 
     # CÓDIGO:
-    # imagem_peixe = Imagem.carregar('test_images/bluegill.png')
-    # imagem_peixe_invertida = imagem_peixe.invertida()
-    # imagem_peixe_invertida.salvar('test_images/bluegill.png')
-    # imagem_peixe_invertida.mostrar()
+    #imagem_peixe = Imagem.carregar('test_images/bluegill.png')
+    #imagem_peixe_invertida = imagem_peixe.invertida()
+    #imagem_peixe_invertida.salvar('test_images/bluegill.png')
+    #imagem_peixe_invertida.mostrar()
 
     # RESPOSTA:
     # Primeiro carrega a imagem original do peixe e adiciona variável
     # depois aplica o filtro de inversão e adiciona variável de resultado
     # depois salva a imagem invertida e mostra a imagem invertida
+
+    # QUESTÃO 03: Qual será o valor do pixel na imagem de saída no local indicado pelo destaque vermelho? Observe que neste ponto ainda 
+    # não arredondamos ou recortamos o valor, informe exatamente como você calculou. Observação: demonstre passo a passo os cálculos realizados.
+
+    # CÓDIGO:
+    # Imagem do kernel de entrada:
+    kernel = [
+        [0.00, -0.07, 0.00],
+        [-0.45, 1.20, -0.25],
+        [0.00, -0.12, 0.00]
+    ]
+
+    # Imagem de entrada dada pela questão: 
+    imagem_entrada = Imagem(3, 3, [80, 53, 99, 129, 127, 148, 175, 174, 193])
+    
+    # Funcao de correlacao:
+    imagem_gerada = imagem_entrada.correlacao(kernel)
+    valor_pixel = imagem_gerada.get_pixel(1, 1)
+    print("O valor do pixel na posicao (1, 1) é:", valor_pixel)
+
+    # RESPOSTA:
+    # O valor do pixel na imagem de saída no local indicado pelo destaque vermelho é: 33.
+    # Passo a passo dos cálculos realizados:
+    
+    # 1. Multiplicar o pixel da imagem de entrada pelo valor do kernel:
+    # 80 * 0.00 = 0
+    # 53 * -0.07 = -3.71
+    # 99 * 0.00 = 0
+    # 129 * -0.45 = -58.05
+    # 127 * 1.20 = 152.4
+    # 148 * -0.25 = -37.0
+    # 175 * 0.00 = 0
+    # 174 * -0.12 = -20.88
+    # 193 * 0.00 = 0
+    
+    # 2. Somar os resultados das multiplicações:
+    # 0 + (-3.71) + 0 + (-58.05) + 152.4 + (-37.0) + 0 + (-20.88) + 0 = 32.76
+    
+    # 3. Arredondar o resultado para o inteiro mais próximo:
+    # 32.76 arredondado para o inteiro mais próximo é 33.
+    
+    # 4. O valor do pixel na imagem de saída no local indicado pelo destaque vermelho é: 33.
+
+
 
 
 
@@ -266,5 +331,5 @@ if __name__ == '__main__':
     # sejam exibidas corretamente, quer estejamos executando
     # interativamente ou não:
     
-    #if WINDOWS_OPENED and not sys.flags.interactive:
-    #    tk_root.mainloop()
+    if WINDOWS_OPENED and not sys.flags.interactive:
+        tk_root.mainloop()
