@@ -282,19 +282,19 @@ if __name__ == '__main__':
 
     # CÓDIGO:
     # Imagem do kernel de entrada:
-    kernel = [
-        [0.00, -0.07, 0.00],
-        [-0.45, 1.20, -0.25],
-        [0.00, -0.12, 0.00]
-    ]
+    #kernel = [
+    #	 [0.00, -0.07, 0.00],
+    #    [-0.45, 1.20, -0.25],
+    #    [0.00, -0.12, 0.00]
+    #]
 
     # Imagem de entrada dada pela questão: 
-    imagem_entrada = Imagem(3, 3, [80, 53, 99, 129, 127, 148, 175, 174, 193])
+    #imagem_entrada = Imagem(3, 3, [80, 53, 99, 129, 127, 148, 175, 174, 193])
     
     # Funcao de correlacao:
-    imagem_gerada = imagem_entrada.correlacao(kernel)
-    valor_pixel = imagem_gerada.get_pixel(1, 1)
-    print("O valor do pixel na posicao (1, 1) é:", valor_pixel)
+    #imagem_gerada = imagem_entrada.correlacao(kernel)
+    #valor_pixel = imagem_gerada.get_pixel(1, 1)
+    #print("O valor do pixel na posicao (1, 1) é:", valor_pixel)
 
     # RESPOSTA:
     # O valor do pixel na imagem de saída no local indicado pelo destaque vermelho é: 33.
