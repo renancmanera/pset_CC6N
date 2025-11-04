@@ -25,6 +25,16 @@ import tkinter
 from io import BytesIO
 from PIL import Image as PILImage
 
+def criar_kernel(n):
+    if n <= 0:
+        raise ValueError("O tamanho do kernel 'n' deve ser positivo.")
+        
+    valor = 1.0 / (n * n)
+    
+    linha = [valor] * n
+    kernel = [linha] * n
+    
+    return kernel
 
 # Classe Imagem:
 class Imagem:
@@ -71,17 +81,39 @@ class Imagem:
                         x1 = x - indice_centro + h
                         y1 = y - indice_centro + w
                         nova_cor += self.get_pixel(x1, y1) * kernel[w][h]
-                # Arredondar e limitar o valor ao intervalo [0, 255]
-                nova_cor = round(nova_cor)
-                nova_cor = max(0, min(255, nova_cor))
                 final_img.set_pixel(x, y, nova_cor)
         return final_img
 
     def borrada(self, n):
-        raise NotImplementedError
+        kernel = criar_kernel(n)
+        imagem_borrada = self.correlacao(kernel)
+        imagem_borrada.limpar()
+        return imagem_borrada
+    
+    # Arredonda e limita o valor ao intervalo [0, 255]
+    # Criado separado devido a instrucao da focada (nitidez) de nao arredondar ate o final
+    def limpar(self):
+        for i in range(len(self.pixels)):
+            valor_atual = self.pixels[i]
+            valor_arredondado = round(valor_atual)
+            valor_limitado = max(0, min(255, valor_arredondado))
+            self.pixels[i] = valor_limitado
 
     def focada(self, n):
-        raise NotImplementedError
+        kernel_blur = criar_kernel(n)
+        # Gera Imagem borrada B
+        imagem_borrada_B = self.correlacao(kernel_blur)
+        # Gera imagem nitida S
+        imagem_nitida_S = Imagem.nova(self.largura, self.altura)
+        # fórmula: S = 2*I - B
+        for x in range(self.largura):
+            for y in range(self.altura):
+                pixel_I = self.get_pixel(x, y)
+                pixel_B = imagem_borrada_B.get_pixel(x, y)
+                pixel_S = (2 * pixel_I) - pixel_B
+                imagem_nitida_S.set_pixel(x, y, pixel_S)
+        imagem_nitida_S.limpar()
+        return imagem_nitida_S
 
     def bordas(self):
         raise NotImplementedError
@@ -303,7 +335,7 @@ if __name__ == '__main__':
     # O valor do pixel na imagem de saída no local indicado pelo destaque vermelho é: 33.
     # Passo a passo dos cálculos realizados:
     
-    # 1. Multiplicar o pixel da imagem de entrada pelo valor do kernel:
+    # Multiplicar o pixel da imagem de entrada pelo valor do kernel:
     # 80 * 0.00 = 0
     # 53 * -0.07 = -3.71
     # 99 * 0.00 = 0
@@ -314,13 +346,11 @@ if __name__ == '__main__':
     # 174 * -0.12 = -20.88
     # 193 * 0.00 = 0
     
-    # 2. Somar os resultados das multiplicações:
+    # Somar os resultados das multiplicações:
     # 0 + (-3.71) + 0 + (-58.05) + 152.4 + (-37.0) + 0 + (-20.88) + 0 = 32.76
-    
-    # 3. Arredondar o resultado para o inteiro mais próximo:
+    # Arredondar o resultado para o inteiro mais próximo:
     # 32.76 arredondado para o inteiro mais próximo é 33.
-    
-    # 4. O valor do pixel na imagem de saída no local indicado pelo destaque vermelho é: 33.
+    # O valor do pixel na imagem de saída no local indicado pelo destaque vermelho é: 33.
 
     # QUESTÃO 04: quando você tiver implementado seu código, tente executá-lo em
     # test_images/pigbird.png com o seguinte kernel 9 × 9:
@@ -347,8 +377,44 @@ if __name__ == '__main__':
     #imagem_porco_correlacao.salvar('test_images/pigbird.png')
     #imagem_porco_correlacao.mostrar()
 
+    # QUESTÃO DA IMAGEM DO GATO COM FILTRO BORRADO
 
+    # CÓDIGO
+    #imagem_gato = Imagem.carregar('test_images/amorinha.jpg')
+    #imagem_gato_borrado = imagem_gato.borrada(5)
+    #imagem_gato_borrado.salvar('test_images/amorinha.jpg')
+    #imagem_gato_borrado.mostrar()
 
+    # QUESTÃO 05: se quisermos usar uma versão desfocada B que foi feita com um
+    # kernel de desfoque de caixa de 3 × 3, que kernel k poderíamos usar para calcular
+    # toda a imagem nítida com uma única correlação? Justifique sua resposta mostrando os cálculos.
+    # Implemente uma máscara de não nitidez como o método focada da classe
+    # Imagem, onde n denota o tamanho do kernel de desfoque que deve ser usado para
+    # gerar a cópia desfocada da imagem. Este método deve retornar uma nova imagem
+    # mais nítida. Você pode implementar isso como uma correlação única ou usando`
+    # uma subtração explícita, mas se você usar uma subtração explícita, certifique-se de
+    # não fazer nenhum arredondamento até o final (a versão desfocada intermediária não
+    # deve ser arredondada ou cortada de forma alguma.
+    # Quando terminar e seu código passar nos testes relacionados à nitidez, execute
+    # seu filtro de nitidez na imagem test_images/python.png usando um kernel
+    # de tamanho 11, salve o resultado como uma imagem PNG.`
+
+    # RESPOSTA: 
+    # A fórmula da nitidez é: S = 2*I - B (Nítida = 2*Original - Borrada).
+    # Como a correlação é linear, podemos aplicar nos kernels:
+    # k_Nitidez = 2 * k_Identidade - k_Desfoque
+    # Para 3x3:
+    # k_Identidade = [[0, 0, 0], [0, 1, 0], [0, 0, 0]]
+    # k_Desfoque = [[1/9, 1/9, 1/9], [1/9, 1/9, 1/9], [1/9, 1/9, 1/9]] média dos 9 pixels, por isso 1/9 em toda posição  
+    # Cálculo:
+    # k_Nitidez = [[0, 0, 0], [0, 2, 0], [0, 0, 0]] - [[1/9, 1/9, 1/9], [1/9, 1/9, 1/9], [1/9, 1/9, 1/9]]
+    # k_Nitidez = [[-1/9, -1/9, -1/9], [-1/9, 17/9, -1/9], [-1/9, -1/9, -1/9]]
+
+    # CÓDIGO:
+    #imagem_python = Imagem.carregar('test_images/python.png')
+    #imagem_python_focada = imagem_python.focada(11)
+    #imagem_python_focada.salvar('python_nitida.png')
+    #imagem_python_focada.mostrar()
 
 
 
