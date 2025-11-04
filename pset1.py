@@ -30,7 +30,6 @@ def criar_kernel(n):
         raise ValueError("O tamanho do kernel 'n' deve ser positivo.")
         
     valor = 1.0 / (n * n)
-    
     linha = [valor] * n
     kernel = [linha] * n
     
@@ -116,7 +115,31 @@ class Imagem:
         return imagem_nitida_S
 
     def bordas(self):
-        raise NotImplementedError
+        Kx = [
+            [-1, 0, 1],
+            [-2, 0, 2],
+            [-1, 0, 1]
+        ]
+        
+        Ky = [
+            [-1, -2, -1],
+            [ 0,  0,  0],
+            [ 1,  2,  1]
+        ]
+        
+        Ox = self.correlacao(Kx)
+        Oy = self.correlacao(Ky)
+        imagem_final = Imagem.nova(self.largura, self.altura)
+        
+        for x in range(self.largura):
+            for y in range(self.altura):
+                pixel_ox = Ox.get_pixel(x, y)
+                pixel_oy = Oy.get_pixel(x, y)
+                novo_valor = math.sqrt(pixel_ox**2 + pixel_oy**2)
+                imagem_final.set_pixel(x, y, novo_valor)
+        imagem_final.limpar()
+        
+        return imagem_final
 
     # Abaixo deste ponto estão utilitários para carregar, salvar e mostrar
     # as imagens, bem como para a realização de testes. Você deve ler as funções
@@ -270,9 +293,7 @@ if __name__ == '__main__':
     # sendo executados. Este é um bom lugar para gerar imagens, etc.
     pass
 
-
-
-
+# ---------------------------------------------------------------------------------------------------------------------------
 
     # QUESTÃO 01: se você passar essa imagem pelo filtro de inversão, qual seria o
     # output esperado? Justifique sua resposta.
@@ -297,6 +318,8 @@ if __name__ == '__main__':
     # 255 - 136 = 119
     # 255 - 200 = 55
 
+# ---------------------------------------------------------------------------------------------------------------------------
+
     # QUESTÃO 02: faça a depuração e, quando terminar, seu código deve conseguir passar em todos os testes do grupo de teste
     # TestInvertida (incluindo especificamente o que você acabou de criar). Execute seu filtro de inversão na imagem
     # test_images/bluegill.png, salve o resultado como uma imagem PNG e salve a imagem.
@@ -311,6 +334,8 @@ if __name__ == '__main__':
     # Primeiro carrega a imagem original do peixe e adiciona variável
     # depois aplica o filtro de inversão e adiciona variável de resultado
     # depois salva a imagem invertida e mostra a imagem invertida
+
+# ---------------------------------------------------------------------------------------------------------------------------
 
     # QUESTÃO 03: Qual será o valor do pixel na imagem de saída no local indicado pelo destaque vermelho? Observe que neste ponto ainda 
     # não arredondamos ou recortamos o valor, informe exatamente como você calculou. Observação: demonstre passo a passo os cálculos realizados.
@@ -352,6 +377,8 @@ if __name__ == '__main__':
     # 32.76 arredondado para o inteiro mais próximo é 33.
     # O valor do pixel na imagem de saída no local indicado pelo destaque vermelho é: 33.
 
+# ---------------------------------------------------------------------------------------------------------------------------
+
     # QUESTÃO 04: quando você tiver implementado seu código, tente executá-lo em
     # test_images/pigbird.png com o seguinte kernel 9 × 9:
     
@@ -377,6 +404,8 @@ if __name__ == '__main__':
     #imagem_porco_correlacao.salvar('test_images/pigbird.png')
     #imagem_porco_correlacao.mostrar()
 
+# ---------------------------------------------------------------------------------------------------------------------------
+    
     # QUESTÃO DA IMAGEM DO GATO COM FILTRO BORRADO
 
     # CÓDIGO
@@ -384,6 +413,8 @@ if __name__ == '__main__':
     #imagem_gato_borrado = imagem_gato.borrada(5)
     #imagem_gato_borrado.salvar('test_images/amorinha.jpg')
     #imagem_gato_borrado.mostrar()
+
+# ---------------------------------------------------------------------------------------------------------------------------
 
     # QUESTÃO 05: se quisermos usar uma versão desfocada B que foi feita com um
     # kernel de desfoque de caixa de 3 × 3, que kernel k poderíamos usar para calcular
@@ -416,9 +447,37 @@ if __name__ == '__main__':
     #imagem_python_focada.salvar('python_nitida.png')
     #imagem_python_focada.mostrar()
 
+# ---------------------------------------------------------------------------------------------------------------------------
 
+    # QUESTÃO 06: explique e o que cada um dos kernels acima, por si só, está fazendo.
+    # Tente executar mostrar nos resultados dessas correlações intermediárias para ter
+    # uma noção do que está acontecendo aqui.
+    # Implemente o detector de bordas como o método bordas dentro da classe
+    # Imagem. O método deve retornar uma nova instância de Imagem resultante das operações acima.
+    # Quando terminar e seu código passar nos testes de detecção de borda, execute
+    # seu detector de borda na imagem test_images/construct.png, salve o resultado como uma imagem PNG.
 
+    # RESPOSTA: 
+    # Kernel Kx (Detecta Bordas Verticais):
+    # Kx = [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]]
+    # Este kernel subtrai os pixels da coluna da esquerda dos pixels da direita. 
+    # Ele gera um valor alto se houver uma mudança radical de cores na vertical.
 
+    # Kernel Ky (Detecta Bordas Horizontais):
+    # Ky = [[-1, -2, -1], [ 0, 0, 0], [ 1, 2, 1]]
+    # Este kernel subtrai os pixels da linha de cima dos pixels da linha de baixo, 
+    # detectando mudanças abruptas na horizontal (bordas horizontais).
+
+    # A fórmula final (sqrt(Ox^2 + Oy^2)) usa o Teorema de Pitágoras
+    # para calcular a força total da borda, não importando sua direção.
+
+    # CÓDIGO:
+    #imagem_construct = Imagem.carregar('test_images/construct.png')
+    #imagem_bordas = imagem_construct.bordas()
+    #imagem_bordas.salvar('construct_bordas.png')
+    #imagem_bordas.mostrar()
+
+# ---------------------------------------------------------------------------------------------------------------------------
 
     # O código a seguir fará com que as janelas de Imagem.mostrar
     # sejam exibidas corretamente, quer estejamos executando
