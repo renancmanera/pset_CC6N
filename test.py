@@ -2,10 +2,10 @@
 # Preencha seus dados e leia a declaração de honestidade abaixo. NÃO APAGUE
 # nenhuma linha deste comentário de seu código!
 #
-#    Nome completo:
-#    Matrícula:
-#    Turma:
-#    Email:
+#    Nome completo: Arthur Oliveira Rueda e Renan Carvalho Manera
+#    Matrícula: 202308630 e 202308516
+#    Turma: CC6N
+#    Email: arthurolivrueda@gmail.com e rcarvalhomanera@gmail.com
 #
 # DECLARAÇÃO DE HONESTIDADE ACADÊMICA:
 # Eu afirmo que o código abaixo foi de minha autoria. Também afirmo que não
