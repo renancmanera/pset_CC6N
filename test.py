@@ -65,9 +65,13 @@ class TestInvertida(unittest.TestCase):
                                  255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255])
         self.assertEqual(resultado,  esperado)
 
+    # Teste utilizado para fazer a questão 1, executando da forma correta para o unittest avaliar
+    # "Modifique este método para que ele implemente o teste de cima (invertendo a pequena imagem 4×1)"
     def test_invertida_2(self):
-        # Escreva aqui o seu caso de teste
-        self.assertTrue(False)
+        imagem_teste = pset1.Imagem(4, 1, [29, 89, 136, 200])
+        imagem_invertida = imagem_teste.invertida()
+        output_esperado = pset1.Imagem(4, 1, [226, 166, 119, 55])
+        self.assertEqual(imagem_invertida.pixels, output_esperado.pixels)
 
     def test_imagens_invertidas(self):
         for nome_arquivo in ('mushroom', 'twocats', 'chess'):
