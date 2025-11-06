@@ -71,7 +71,14 @@ class TestInvertida(unittest.TestCase):
         imagem_teste = pset1.Imagem(4, 1, [29, 89, 136, 200])
         imagem_invertida = imagem_teste.invertida()
         output_esperado = pset1.Imagem(4, 1, [226, 166, 119, 55])
-        self.assertEqual(imagem_invertida.pixels, output_esperado.pixels)
+        self.assertEqual(imagem_invertida, output_esperado)
+
+    # Teste utilizado para fazer a questão 2, executando da forma correta para o unittest avaliar
+    def test_invertida_3(self):
+        imagem_peixe = pset1.Imagem.carregar('test_images/bluegill.png')
+        imagem_peixe_invertida = imagem_peixe.invertida()
+        output_esperado = pset1.Imagem(imagem_peixe.largura, imagem_peixe.altura, [255 - pixel for pixel in imagem_peixe.pixels])
+        self.assertEqual(imagem_peixe_invertida, output_esperado)
 
     def test_imagens_invertidas(self):
         for nome_arquivo in ('mushroom', 'twocats', 'chess'):
@@ -81,7 +88,6 @@ class TestInvertida(unittest.TestCase):
                 resultado = pset1.Imagem.carregar(arquivo_entrada).invertida()
                 esperado = pset1.Imagem.carregar(arquivo_saida)
                 self.assertEqual(resultado,  esperado)
-
 
 # Classe para os testes dos filtros:
 class TestFiltros(unittest.TestCase):
