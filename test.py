@@ -137,6 +137,37 @@ class TestFiltros(unittest.TestCase):
                                  "Cuidado para não modificar a imagem original!")
                 self.assertEqual(resultado,  esperado)
 
+    def test_correlacao1(self):
+        pixels_entrada = [
+            35, 40, 41, 45, 50,
+            40, 40, 42, 46, 52,
+            42, 46, 50, 55, 55,
+            48, 52, 56, 58, 60,
+            56, 60, 65, 70, 75
+        ]
+        imagem_entrada = pset1.Imagem(5, 5, pixels_entrada) 
+        kernel = [
+            [0, 1, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ]
+        imagem_gerada = imagem_entrada.correlacao(kernel)
+        x_teste, y_teste = 2, 2
+        valor_pixel_esperado = 42 
+        valor_pixel_obtido = imagem_gerada.get_pixel(x_teste, y_teste)
+        self.assertEqual(valor_pixel_obtido, valor_pixel_esperado)
+
+    def test_correlacao2(self):
+        kernel = [
+        	[0.00, -0.07, 0.00],
+            [-0.45, 1.20, -0.25],
+            [0.00, -0.12, 0.00]
+        ]
+        imagem_entrada = pset1.Imagem(3, 3, [80, 53, 99, 129, 127, 148, 175, 174, 193])
+        imagem_gerada = imagem_entrada.correlacao(kernel)
+        valor_pixel = imagem_gerada.get_pixel(1, 1)
+        valor_pixel_esperado = 32.76
+        self.assertAlmostEqual(valor_pixel, valor_pixel_esperado) # foi utilizado assertAlmostEqual devido a imprecisao do float
 
 if __name__ == '__main__':
     res = unittest.main(verbosity=3, exit=False)

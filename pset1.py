@@ -357,7 +357,7 @@ if __name__ == '__main__':
     #print("O valor do pixel na posicao (1, 1) é:", valor_pixel)
 
     # RESPOSTA:
-    # O valor do pixel na imagem de saída no local indicado pelo destaque vermelho é: 33.
+    # O valor do pixel na imagem de saída no local indicado pelo destaque vermelho é: 32.76.
     # Passo a passo dos cálculos realizados:
     
     # Multiplicar o pixel da imagem de entrada pelo valor do kernel:
@@ -373,9 +373,10 @@ if __name__ == '__main__':
     
     # Somar os resultados das multiplicações:
     # 0 + (-3.71) + 0 + (-58.05) + 152.4 + (-37.0) + 0 + (-20.88) + 0 = 32.76
-    # Arredondar o resultado para o inteiro mais próximo:
-    # 32.76 arredondado para o inteiro mais próximo é 33.
-    # O valor do pixel na imagem de saída no local indicado pelo destaque vermelho é: 33.
+    # O valor do pixel na imagem de saída no local indicado pelo destaque vermelho é: 32.76.
+
+    # OBS: o valor 32.76 que deveria ser gerado pelo código pode ter um valor diferente, como: 32.760000000000005
+    # devido ao fato do float sofrer de erros de precisão inerentes à sua representação em binário.
 
 # ---------------------------------------------------------------------------------------------------------------------------
 
