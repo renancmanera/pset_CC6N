@@ -15,7 +15,6 @@
 # contra plágio e que caso eu tenha praticado qualquer atividade proibida
 # conforme as normas da disciplina, estou sujeito à penalidades conforme
 # definidas pelo professor da disciplina e/ou instituição.
-#
 
 
 # Imports
