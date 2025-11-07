@@ -75,13 +75,17 @@ class Imagem:
         for x in range(final_img.largura):
             for y in range(final_img.altura):
                 nova_cor = 0
-                for w in range(tamanho_kernel):
-                    for h in range(tamanho_kernel):
+                for w in range(tamanho_kernel):      
+                    for h in range(tamanho_kernel):  
                         x1 = x - indice_centro + h
                         y1 = y - indice_centro + w
-                        nova_cor += self.get_pixel(x1, y1) * kernel[w][h]
+                        pixel_entrada = 0 # Trate a borda como 0
+                        if (0 <= x1 < self.largura) and (0 <= y1 < self.altura):
+                            pixel_entrada = self.get_pixel(x1, y1)
+                        nova_cor += pixel_entrada * kernel[w][h]
                 final_img.set_pixel(x, y, nova_cor)
         return final_img
+
 
     def borrada(self, n):
         kernel = criar_kernel(n)
