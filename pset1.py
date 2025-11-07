@@ -337,10 +337,10 @@ if __name__ == '__main__':
     # test_images/bluegill.png, salve o resultado como uma imagem PNG e salve a imagem.
 
     # CÓDIGO:
-    imagem_peixe = Imagem.carregar('test_images/bluegill.png')
-    imagem_peixe_invertida = imagem_peixe.invertida()
-    imagem_peixe_invertida.mostrar()
-    imagem_peixe_invertida.salvar('test_images/bluegill.png')
+    #imagem_peixe = Imagem.carregar('test_images/bluegill.png')
+    #imagem_peixe_invertida = imagem_peixe.invertida()
+    #imagem_peixe_invertida.mostrar()
+    #imagem_peixe_invertida.salvar('test_images/bluegill.png')
 
     # RESPOSTA:
     # Primeiro carrega a imagem original do peixe e adiciona variável
