@@ -152,7 +152,7 @@ class TestFiltros(unittest.TestCase):
             [0, 0, 0]
         ]
         imagem_gerada = imagem_entrada.correlacao(kernel)
-        x_teste, y_teste = 2, 2
+        x_teste, y_teste = 2, 2 # indice do pixel central do kernel
         valor_pixel_esperado = 42 
         valor_pixel_obtido = imagem_gerada.get_pixel(x_teste, y_teste)
         self.assertEqual(valor_pixel_obtido, valor_pixel_esperado)

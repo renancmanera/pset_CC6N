@@ -29,7 +29,7 @@ def criar_kernel(n):
     if n <= 0:
         raise ValueError("O tamanho do kernel 'n' deve ser positivo.")
         
-    valor = 1.0 / (n * n)
+    valor = 1.0 / (n * n) # n2 é o numero total de elementos que tem na matriz
     kernel = [[valor] * n for _ in range(n)]
     
     return kernel
@@ -69,26 +69,27 @@ class Imagem:
 
     def correlacao(self, kernel):
         tamanho_kernel = len(kernel)
-        indice_centro = tamanho_kernel // 2
-        final_img = Imagem.nova(self.largura, self.altura)
-        for x in range(final_img.largura):
-            for y in range(final_img.altura):
+        indice_central = tamanho_kernel // 2
+        imagem_nova = Imagem.nova(self.largura, self.altura)
+        # loop de cada pixel
+        for x in range(imagem_nova.largura):
+            
+            for y in range(imagem_nova.altura):
                 nova_cor = 0
-                for w in range(tamanho_kernel):      
-                    for h in range(tamanho_kernel):  
-                        x1 = x - indice_centro + h
-                        y1 = y - indice_centro + w
-                        pixel_entrada = 0 # Trate a borda como 0
-                        if (0 <= x1 < self.largura) and (0 <= y1 < self.altura):
-                            pixel_entrada = self.get_pixel(x1, y1)
-                        nova_cor += pixel_entrada * kernel[w][h]
-                final_img.set_pixel(x, y, nova_cor)
-        return final_img
+                # loop em cada elemento do kernel
+                for w in range(tamanho_kernel):
+                    for h in range(tamanho_kernel):
+                        x1 = x - indice_central + h
+                        y1 = y - indice_central + w
+                        nova_cor += self.get_pixel(x1, y1) * kernel[w][h]
+                        # define o valor do pixel final
+                imagem_nova.set_pixel(x, y, nova_cor)
+        return imagem_nova
 
 
     def borrada(self, n):
-        kernel = criar_kernel(n)
-        imagem_borrada = self.correlacao(kernel)
+        kernel = criar_kernel(n) # cria kernel de media de tamanho n x n
+        imagem_borrada = self.correlacao(kernel) # usa o kernel para fazer com que cada nova pixel seja media dos seus vizinhos
         imagem_borrada.limpar()
         return imagem_borrada
     
@@ -110,30 +111,38 @@ class Imagem:
         # fórmula: S = 2*I - B
         for x in range(self.largura):
             for y in range(self.altura):
+                # pega o pixel da imagem original
                 pixel_I = self.get_pixel(x, y)
+                # pega o pixel da imagem borrada
                 pixel_B = imagem_borrada_B.get_pixel(x, y)
+                # calcula o novo pixel usando a formula
                 pixel_S = (2 * pixel_I) - pixel_B
                 imagem_nitida_S.set_pixel(x, y, pixel_S)
         imagem_nitida_S.limpar()
         return imagem_nitida_S
 
     def bordas(self):
+        # bordas verticais
         Kx = [
             [-1, 0, 1],
             [-2, 0, 2],
             [-1, 0, 1]
         ]
         
+        # bordas horizontais
         Ky = [
             [-1, -2, -1],
             [ 0,  0,  0],
             [ 1,  2,  1]
         ]
         
+        # nova imagem com a "forca" das bordas
         Ox = self.correlacao(Kx)
         Oy = self.correlacao(Ky)
+        # gera imagem nova
         imagem_final = Imagem.nova(self.largura, self.altura)
         
+        # itera em cada pixel das imagens Ox e Oy
         for x in range(self.largura):
             for y in range(self.altura):
                 pixel_ox = Ox.get_pixel(x, y)
@@ -328,10 +337,10 @@ if __name__ == '__main__':
     # test_images/bluegill.png, salve o resultado como uma imagem PNG e salve a imagem.
 
     # CÓDIGO:
-    #imagem_peixe = Imagem.carregar('test_images/bluegill.png')
-    #imagem_peixe_invertida = imagem_peixe.invertida()
-    #imagem_peixe_invertida.salvar('test_images/bluegill.png')
-    #imagem_peixe_invertida.mostrar()
+    imagem_peixe = Imagem.carregar('test_images/bluegill.png')
+    imagem_peixe_invertida = imagem_peixe.invertida()
+    imagem_peixe_invertida.mostrar()
+    imagem_peixe_invertida.salvar('test_images/bluegill.png')
 
     # RESPOSTA:
     # Primeiro carrega a imagem original do peixe e adiciona variável
