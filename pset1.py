@@ -413,10 +413,10 @@ if __name__ == '__main__':
     # QUESTÃO DA IMAGEM DO GATO COM FILTRO BORRADO
 
     # CÓDIGO
-    imagem_gato = Imagem.carregar('test_images/cat.png')
-    imagem_gato_borrado = imagem_gato.borrada(5)
-    imagem_gato_borrado.salvar('test_images/cat.png')
-    imagem_gato_borrado.mostrar()
+    #imagem_gato = Imagem.carregar('test_images/cat.png')
+    #imagem_gato_borrado = imagem_gato.borrada(5)
+    #imagem_gato_borrado.salvar('test_images/cat.png')
+    #imagem_gato_borrado.mostrar()
 
 # ---------------------------------------------------------------------------------------------------------------------------
 
